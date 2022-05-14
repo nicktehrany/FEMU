@@ -1,6 +1,6 @@
 #ifndef __FEMU_ZNS_H
 #define __FEMU_ZNS_H
-
+/* TODO: Copyback and Multiplane. */
 #define PARALLEL_ZONE (true)
 
 #include "../nvme.h"
