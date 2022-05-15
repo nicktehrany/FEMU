@@ -202,7 +202,7 @@ static void *nvme_poller(void *arg)
         while (1) {
             if ((!n->dataplane_started)) {
                 /* Maybe nsleep is better? Take a try. */
-                usleep(1000);
+                usleep(1);
                 continue;
             }
 
@@ -217,7 +217,7 @@ static void *nvme_poller(void *arg)
     default:
         while (1) {
             if ((!n->dataplane_started)) {
-                usleep(1000);
+                usleep(1);
                 continue;
             }
 

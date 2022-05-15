@@ -1,7 +1,9 @@
 #include "../nvme.h"
 
-#define PAGE_READ_LATENCY (20000)
-#define PAGE_WRITE_LATENCY (80000)
+#define PAGE_READ_LATENCY (40000)
+#define PAGE_WRITE_LATENCY (140000)
+#define BLOCK_ERASE_LATENCY (3000000)
+#define CHANNEL_PAGE_XFER_LATENCY (60000)
 
 void set_latency(FemuCtrl *n)
 {
@@ -44,7 +46,7 @@ int64_t advance_channel_timestamp(FemuCtrl *n, int ch, uint64_t now, int opcode)
     uint64_t data_ready_ts;
 
     /* TODO: Considering channel-level timing */
-    return now;
+    /* return now; */
 
     pthread_spin_lock(&n->chnl_locks[ch]);
     if (now < n->chnl_next_avail_time[ch]) {
@@ -55,8 +57,11 @@ int64_t advance_channel_timestamp(FemuCtrl *n, int ch, uint64_t now, int opcode)
 
     switch (opcode) {
     case NVME_CMD_OC_READ:
+    case NVME_CMD_READ:
     case NVME_CMD_OC_WRITE:
-        data_ready_ts = start_data_xfer_ts + n->chnl_pg_xfer_lat_ns * 2;
+    case NVME_CMD_WRITE:
+    case NVME_CMD_ZONE_APPEND:
+        data_ready_ts = start_data_xfer_ts + CHANNEL_PAGE_XFER_LATENCY;
         break;
     case NVME_CMD_OC_ERASE:
         data_ready_ts = start_data_xfer_ts;
@@ -78,7 +83,7 @@ int64_t advance_chip_timestamp(FemuCtrl *n, int lunid, uint64_t now, int opcode,
     int64_t lat;
     int64_t io_done_ts;
 
-    /* FIXME: somehow lat is always 0, so I replace it manually with SLC latency. It should be fixed. */
+    /* Somehow lat is always 0, so I replace it manually with the latency configuration defined in IODA(SOSP'21). */
     switch (opcode) {
     case NVME_CMD_OC_READ:
     case NVME_CMD_READ:

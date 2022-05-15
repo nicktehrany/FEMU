@@ -1119,9 +1119,6 @@ static inline uint64_t zns_l2p(NvmeNamespace* ns, uint64_t lba)
 
 static int zns_advance_status(FemuCtrl* n, NvmeNamespace* ns, NvmeRequest *req, size_t *aio_sector_list, size_t num_pg)
 {
-    // NvmeRwCmd *rw = (NvmeRwCmd *)&req->cmd;
-    // uint64_t slba = le64_to_cpu(rw->slba);
-
     int64_t now = req->stime;
     int64_t io_done_ts, cur_time_need_to_emulate, total_time_need_to_emulate = 0;
 
