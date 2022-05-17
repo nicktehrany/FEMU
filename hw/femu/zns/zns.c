@@ -1200,8 +1200,7 @@ static uint16_t zns_do_write(FemuCtrl *n, NvmeRequest *req, bool append,
     size_t *aio_sector_list = (size_t *)g_malloc0(AIO_SECTOR_LIST_SIZE);
     /* ---------- SG max length is 4KiB, and every sg is as large as possible. ---------- */
     size_t secs_per_sg = (4 * KiB) / n->zns_params.sec_size;
-    for (size_t cnt = 0; cnt < nlb; cnt += secs_per_sg)
-    {
+    for (size_t cnt = 0; cnt < nlb; cnt += secs_per_sg) {
       aio_sector_list[cnt / secs_per_sg] = zns_l2b(ns, zns_l2p(ns, slba + cnt));
     }
 
@@ -1232,6 +1231,15 @@ err:
 static uint16_t zns_admin_cmd(FemuCtrl *n, NvmeCmd *cmd)
 {
     switch (cmd->opcode) {
+    case NVME_ADM_CMD_NLOG_CREATE:
+        femu_log("NVME_ADM_CMD_NLOG_CREATE\n");
+        break;
+    case NVME_ADM_CMD_NLOG_CLOSE:
+        femu_log("NVME_ADM_CMD_NLOG_CLOSE\n");
+        break;
+    case NVME_ADM_CMD_NLOG_SET_SIZE:
+        femu_log("NVME_ADM_CMD_NLOG_SET_SIZE\n");
+        break;
     default:
         return NVME_INVALID_OPCODE | NVME_DNR;
     }
@@ -1291,8 +1299,7 @@ static uint16_t zns_read(FemuCtrl *n, NvmeNamespace *ns, NvmeCmd *cmd,
     /* ---------- TODO(haltz) 256 should be MAX_REQ_SECTORS/PAGES, FIX IT ---------- */
     size_t *aio_sector_list = (size_t *)g_malloc0(AIO_SECTOR_LIST_SIZE);
     size_t secs_per_sg = (4 * KiB) / n->zns_params.sec_size;
-    for (size_t cnt = 0; cnt < nlb; cnt += secs_per_sg)
-    {
+    for (size_t cnt = 0; cnt < nlb; cnt += secs_per_sg) {
       aio_sector_list[cnt / secs_per_sg] = zns_l2b(ns, zns_l2p(ns, slba + cnt));
     }
 
@@ -1366,8 +1373,7 @@ static uint16_t zns_write(FemuCtrl *n, NvmeNamespace *ns, NvmeCmd *cmd,
 
     size_t *aio_sector_list = (size_t *)g_malloc0(AIO_SECTOR_LIST_SIZE);
     size_t secs_per_sg = (4 * KiB) / n->zns_params.sec_size;
-    for (size_t cnt = 0; cnt < nlb; cnt += secs_per_sg)
-    {
+    for (size_t cnt = 0; cnt < nlb; cnt += secs_per_sg) {
         aio_sector_list[cnt / secs_per_sg] = zns_l2b(ns, zns_l2p(ns, slba + cnt));
     }
 
