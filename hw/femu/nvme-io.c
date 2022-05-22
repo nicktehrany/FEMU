@@ -487,7 +487,6 @@ static uint16_t nvme_io_cmd(FemuCtrl *n, NvmeCmd *cmd, NvmeRequest *req)
 {
     NvmeNamespace *ns;
     uint32_t nsid = le32_to_cpu(cmd->nsid);
-    femu_log("NVME IO CMD: 0x%02x\n", (int)cmd->opcode);
 
     if (nsid == 0 || nsid > n->num_namespaces) {
         femu_err("%s, NVME_INVALID_NSID %" PRIu32 "\n", __func__, nsid);

@@ -635,6 +635,25 @@ static uint16_t zns_reset_zone(NvmeNamespace *ns, NvmeZone *zone,
     return NVME_SUCCESS;
 }
 
+/* TODO: complement the three functions as below. */
+static uint16_t zns_create_zone(NvmeNamespace *ns, NvmeZone *zone,
+                               NvmeZoneState state, NvmeRequest *req)
+{
+    return NVME_SUCCESS;
+}
+
+static uint16_t zns_delete_zone(NvmeNamespace *ns, NvmeZone *zone,
+                               NvmeZoneState state, NvmeRequest *req)
+{
+    return NVME_SUCCESS;
+}
+
+static uint16_t zns_setsize_zone(NvmeNamespace *ns, NvmeZone *zone,
+                               NvmeZoneState state, NvmeRequest *req)
+{
+    return NVME_SUCCESS;
+}
+
 static uint16_t zns_offline_zone(NvmeNamespace *ns, NvmeZone *zone,
                                  NvmeZoneState state, NvmeRequest *req)
 {
@@ -850,6 +869,15 @@ static uint16_t zns_zone_mgmt_send(FemuCtrl *n, NvmeRequest *req)
         *resets = 1;
         status = zns_do_zone_op(ns, zone, proc_mask, zns_reset_zone, req);
         (*resets)--;
+        return NVME_SUCCESS;
+    case NVME_ZONE_ACTION_CREATE:
+        status = zns_do_zone_op(ns, zone, proc_mask, zns_create_zone, req);
+        return NVME_SUCCESS;
+    case NVME_ZONE_ACTION_DELETE:
+        status = zns_do_zone_op(ns, zone, proc_mask, zns_delete_zone, req);
+        return NVME_SUCCESS;
+    case NVME_ZONE_ACTION_SETSIZE:
+        status = zns_do_zone_op(ns, zone, proc_mask, zns_setsize_zone, req);
         return NVME_SUCCESS;
     case NVME_ZONE_ACTION_OFFLINE:
         if (all) {
@@ -1231,15 +1259,6 @@ err:
 static uint16_t zns_admin_cmd(FemuCtrl *n, NvmeCmd *cmd)
 {
     switch (cmd->opcode) {
-    case NVME_ADM_CMD_NLOG_CREATE:
-        femu_log("NVME_ADM_CMD_NLOG_CREATE\n");
-        break;
-    case NVME_ADM_CMD_NLOG_CLOSE:
-        femu_log("NVME_ADM_CMD_NLOG_CLOSE\n");
-        break;
-    case NVME_ADM_CMD_NLOG_SET_SIZE:
-        femu_log("NVME_ADM_CMD_NLOG_SET_SIZE\n");
-        break;
     default:
         return NVME_INVALID_OPCODE | NVME_DNR;
     }

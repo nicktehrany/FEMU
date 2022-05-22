@@ -950,7 +950,6 @@ static uint16_t nvme_format(FemuCtrl *n, NvmeCmd *cmd)
 
 static uint16_t nvme_admin_cmd(FemuCtrl *n, NvmeCmd *cmd, NvmeCqe *cqe)
 {
-    femu_log("NVME IO CMD: 0x%02x\n", (int)cmd->opcode);
     switch (cmd->opcode) {
     case NVME_ADM_CMD_FEMU_DEBUG:
         n->upg_rd_lat_ns = le64_to_cpu(cmd->cdw10);

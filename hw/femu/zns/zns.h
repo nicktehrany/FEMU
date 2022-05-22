@@ -54,6 +54,9 @@ enum NvmeZoneSendAction {
     NVME_ZONE_ACTION_OPEN            = 0x03,
     NVME_ZONE_ACTION_RESET           = 0x04,
     NVME_ZONE_ACTION_OFFLINE         = 0x05,
+    NVME_ZONE_ACTION_CREATE          = 0x06,
+    NVME_ZONE_ACTION_DELETE          = 0x07,
+    NVME_ZONE_ACTION_SETSIZE         = 0x08,
     NVME_ZONE_ACTION_SET_ZD_EXT      = 0x10,
 };
 
