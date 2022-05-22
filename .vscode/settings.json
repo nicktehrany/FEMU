@@ -16,6 +16,9 @@
         "gfileutils.h": "c",
         "gerror.h": "c",
         "gquark.h": "c",
-        "*.code": "c"
+        "*.code": "c",
+        "timing.h": "c",
+        "nand.h": "c",
+        "dram.h": "c"
     }
 }

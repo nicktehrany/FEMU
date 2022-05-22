@@ -122,6 +122,26 @@ typedef struct NvmeNamespaceParams {
     uint32_t zd_extension_size;
 } NvmeNamespaceParams;
 
+typedef struct ZnsPlaneStatus {
+    uint32_t nr_blk; /* number of block */
+    unsigned long *bitmap; /* indicate the usage of erase units in this plane */
+} ZnsPlaneStatus;
+
+typedef struct ZnsChipStatus {
+    uint32_t nr_plane; /* number of plane */
+    ZnsPlaneStatus *plane_status_array;
+} ZnsChipStatus;
+
+typedef struct ZnsChnlStatus {
+    uint32_t nr_chip; /* number of chip */
+    ZnsChipStatus *chip_status_array;
+} ZnsChnlStatus;
+
+typedef struct ZnsSsd {
+    uint32_t nr_chnl;
+    ZnsChnlStatus *chnl_status_array;
+} ZnsSsd;
+
 static inline uint32_t zns_nsid(NvmeNamespace *ns)
 {
     if (ns) {
