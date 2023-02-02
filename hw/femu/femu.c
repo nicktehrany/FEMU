@@ -631,7 +631,7 @@ static Property femu_props[] = {
     DEFINE_PROP_UINT8("mpsmin", FemuCtrl, mpsmin, 0),
     DEFINE_PROP_UINT8("mpsmax", FemuCtrl, mpsmax, 0),
     DEFINE_PROP_UINT8("nlbaf", FemuCtrl, nlbaf, 5),
-    DEFINE_PROP_UINT8("lba_index", FemuCtrl, lba_index, 0),
+    DEFINE_PROP_UINT8("lba_index", FemuCtrl, lba_index, 3),
     DEFINE_PROP_UINT8("extended", FemuCtrl, extended, 0),
     DEFINE_PROP_UINT8("dpc", FemuCtrl, dpc, 0),
     DEFINE_PROP_UINT8("dps", FemuCtrl, dps, 0),

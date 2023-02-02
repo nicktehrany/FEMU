@@ -134,8 +134,8 @@ static void zns_init_zone_identify(FemuCtrl *n, NvmeNamespace *ns, int lba_index
     id_ns_z->zoc = 0;
     id_ns_z->ozcs = n->cross_zone_read ? 0x01 : 0x00;
 
-    id_ns_z->lbafe[lba_index].zsze = cpu_to_le64(n->zone_size);
-    id_ns_z->lbafe[lba_index].zdes = n->zd_extension_size >> 6; /* Units of 64B */
+    id_ns_z->lbafe[n->lba_index].zsze = cpu_to_le64(n->zone_size);
+    id_ns_z->lbafe[n->lba_index].zdes = n->zd_extension_size >> 6; /* Units of 64B */
 
     n->csi = NVME_CSI_ZONED;
     ns->id_ns.nsze = cpu_to_le64(n->num_zones * n->zone_size);
