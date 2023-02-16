@@ -155,8 +155,8 @@ static void zns_init_zone_identify(FemuCtrl *n, NvmeNamespace *ns, int lba_index
     id_ns_z->zoc = 0;
     id_ns_z->ozcs = n->cross_zone_read ? 0x01 : 0x00;
 
-    id_ns_z->lbafe[lba_index].zsze = cpu_to_le64(n->zone_size);
-    id_ns_z->lbafe[lba_index].zdes = n->zd_extension_size >> 6; /* Units of 64B */
+    id_ns_z->lbafe[n->lba_index].zsze = cpu_to_le64(n->zone_size);
+    id_ns_z->lbafe[n->lba_index].zdes = n->zd_extension_size >> 6; /* Units of 64B */
 
     n->csi = NVME_CSI_ZONED;
     ns->id_ns.nsze = cpu_to_le64(n->num_zones * n->zone_size);
@@ -1195,6 +1195,9 @@ static uint16_t zns_do_write(FemuCtrl *n, NvmeRequest *req, bool append,
     NvmeZonedResult *res = (NvmeZonedResult *)&req->cqe;
     uint16_t status;
 
+    assert(n->zoned);
+    req->is_write = true;
+
     if (!wrz) {
         status = nvme_check_mdts(n, data_size);
         if (status) {
@@ -1476,6 +1479,10 @@ static void zns_init(FemuCtrl *n, Error **errp)
 
     zns_set_ctrl(n);
 
+    /* zns_init_zone_cap() requires these to be setup already to determine zone_size_bs */ 
+    n->zns_params.eu_size = n->zns_params.pgs_per_blk * n->zns_params.secs_per_pg * n->zns_params.sec_size;
+    n->zns_params.zone_eus = n->zns_params.num_ch * n->zns_params.num_lun * n->zns_params.num_pln;
+
     zns_init_zone_cap(n);
 
     if (zns_init_zone_geometry(ns, errp) != 0) {
@@ -1483,9 +1490,6 @@ static void zns_init(FemuCtrl *n, Error **errp)
     }
 
     zns_init_zone_identify(n, ns, 0);
-
-    n->zns_params.eu_size = n->zns_params.pgs_per_blk * n->zns_params.secs_per_pg * n->zns_params.sec_size;
-    n->zns_params.zone_eus = n->zns_params.num_ch * n->zns_params.num_lun * n->zns_params.num_pln;
 
     init_nand_flash(n);
 

@@ -97,7 +97,8 @@ int64_t advance_chip_timestamp(FemuCtrl *n, int lunid, uint64_t now, int opcode,
         lat = PAGE_WRITE_LATENCY;
         break;
     case NVME_CMD_OC_ERASE:
-        lat = get_blk_erase_latency(n->flash_type);
+        lat = BLOCK_ERASE_LATENCY;
+        /* lat = get_blk_erase_latency(n->flash_type); */
         break;
     default:
         assert(0);
